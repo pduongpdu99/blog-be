@@ -1,1 +1,4 @@
-export class PostTag {}
+export class PostTag extends BaseEntity<number> {
+  tagId: number;
+  postId: number;
+}

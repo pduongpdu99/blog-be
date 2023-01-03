@@ -1,1 +1,4 @@
-export class PostCategory {}
+export class PostCategory extends BaseEntity<number> {
+  categoryId: number;
+  postId: number;
+}
