@@ -1,13 +1,14 @@
 import { Sequelize } from 'sequelize-typescript';
+import { User } from 'src/apis/users/entities/user.entity';
 
-const databaseProviders = [
+export const databaseProviders = [
   {
-    provide: 'SEQUELIZE',
+    provide: 'SEQUELIZE_MODELS',
     useFactory: async () => {
       const sequelize = new Sequelize(process.env.MYSQL_URI);
 
       // add model
-      sequelize.addModels([]);
+      sequelize.addModels([User]);
 
       await sequelize.sync();
       return sequelize;

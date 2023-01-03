@@ -13,6 +13,7 @@ import { PostCategoriesModule } from './apis/post-categories/post-categories.mod
 import { PostTagsModule } from './apis/post-tags/post-tags.module';
 import { TagsModule } from './apis/tags/tags.module';
 import { ConfigModule } from '@nestjs/config';
+import { DatabaseModule } from './database/module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ConfigModule } from '@nestjs/config';
       envFilePath: '.development.env',
       isGlobal: true,
     }),
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
