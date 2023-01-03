@@ -1,5 +1,17 @@
 import { Sequelize } from 'sequelize-typescript';
-import { User } from 'src/apis/users/entities/user.entity';
+import {
+  User,
+  Category,
+  Comment,
+  Permission,
+  Post,
+  PostCategory,
+  PostComment,
+  PostTag,
+  Question,
+  Role,
+  Tag,
+} from 'src/apis/entities.index';
 
 export const databaseProviders = [
   {
@@ -8,7 +20,19 @@ export const databaseProviders = [
       const sequelize = new Sequelize(process.env.MYSQL_URI);
 
       // add model
-      sequelize.addModels([User]);
+      sequelize.addModels([
+        User,
+        Category,
+        Comment,
+        Permission,
+        Post,
+        PostCategory,
+        PostComment,
+        PostTag,
+        Question,
+        Role,
+        Tag,
+      ]);
 
       await sequelize.sync();
       return sequelize;
