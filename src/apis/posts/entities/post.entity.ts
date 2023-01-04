@@ -1,11 +1,6 @@
 import { Column, Table } from 'sequelize-typescript';
 import { BaseEntity } from 'src/common/entity';
-
-enum PostStatus {
-  ACCEPT,
-  REJECT,
-  PENDING,
-}
+import { PostStatus } from '../posts.enum';
 
 @Table
 export class Post extends BaseEntity<string> {
