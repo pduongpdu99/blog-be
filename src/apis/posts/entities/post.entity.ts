@@ -3,7 +3,7 @@ import { BaseEntity } from 'src/common/entity';
 import { PostStatus } from '../posts.enum';
 
 @Table
-export class Post extends BaseEntity<string> {
+export class Post extends BaseEntity {
   @Column
   authorId: string;
 

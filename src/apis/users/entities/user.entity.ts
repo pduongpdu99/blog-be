@@ -2,7 +2,7 @@ import { Table, Column } from 'sequelize-typescript';
 import { BaseEntity } from 'src/common/entity';
 
 @Table
-export class User extends BaseEntity<string> {
+export class User extends BaseEntity {
   @Column
   roleId: number = 0;
 

@@ -1,12 +1,23 @@
-import { Model } from 'sequelize-typescript';
-export class BaseEntity<T> extends Model {
-  id: T;
+import { Column, Model } from 'sequelize-typescript';
+export class BaseEntity extends Model {
+  @Column
+  id: number | string;
 
-  createdDate: Date | string;
-  updatedDate: Date | string;
-  deletedDate: Date | string;
+  @Column
+  createdDate: number = new Date().getTime();
 
+  @Column
+  updatedDate: number = new Date().getTime();
+
+  @Column
+  deletedDate: number | null = null;
+
+  @Column
   createdBy: string;
-  updatedBy: string;
-  deletedBy: string;
+
+  @Column
+  updatedBy: string | null;
+
+  @Column
+  deletedBy: string | null;
 }
