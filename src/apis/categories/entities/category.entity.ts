@@ -1,14 +1,14 @@
-import { AutoIncrement, Column, Table } from 'sequelize-typescript';
+import { Column, DataType, Table } from 'sequelize-typescript';
 import { BaseEntity } from 'src/common/entity';
 
 @Table
 export class Category extends BaseEntity {
-  @Column
+  @Column({ primaryKey: true, type: DataType.BIGINT, autoIncrement: true })
   id: number;
 
-  @Column
+  @Column({ type: DataType.BIGINT })
   parentId: number;
 
-  @Column
+  @Column({ type: DataType.STRING(50) })
   title: string;
 }

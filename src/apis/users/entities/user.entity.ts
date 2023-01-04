@@ -1,32 +1,38 @@
-import { Table, Column } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  PrimaryKey,
+  AutoIncrement,
+  DataType,
+} from 'sequelize-typescript';
 import { BaseEntity } from 'src/common/entity';
 
 @Table
 export class User extends BaseEntity {
-  @Column
-  id?: string;
+  @Column({ primaryKey: true, type: DataType.STRING })
+  id: string;
 
-  @Column
+  @Column({ type: DataType.BIGINT })
   roleId: number = 0;
 
-  @Column
+  @Column({ type: DataType.BIGINT })
   categoryId: number;
 
-  @Column
+  @Column({ type: DataType.STRING(10) })
   firstname: string;
 
-  @Column
+  @Column({ type: DataType.STRING(10) })
   middlename: string;
 
-  @Column
+  @Column({ type: DataType.STRING(10) })
   lastname: string;
 
-  @Column
+  @Column({ type: DataType.STRING(50) })
   email: string;
 
-  @Column
+  @Column({ type: DataType.STRING })
   hash: string;
 
-  @Column
+  @Column({ type: DataType.STRING(500) })
   bio: string;
 }

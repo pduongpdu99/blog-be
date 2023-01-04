@@ -1,17 +1,17 @@
-import { Column, Table } from "sequelize-typescript";
-import { BaseEntity } from "src/common/entity";
+import { Column, DataType, Table } from 'sequelize-typescript';
+import { BaseEntity } from 'src/common/entity';
 
 @Table
 export class PostComment extends BaseEntity {
-  @Column
-  id?: string;
+  @Column({ primaryKey: true })
+  id: string;
 
-  @Column
+  @Column({ type: DataType.STRING })
   postId: string;
 
-  @Column
+  @Column({ type: DataType.STRING })
   parentId: string;
 
-  @Column
+  @Column({ type: DataType.TEXT })
   content: string;
 }
