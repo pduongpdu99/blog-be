@@ -1,9 +1,6 @@
 import { Column, Model } from 'sequelize-typescript';
 export class BaseEntity extends Model {
   @Column
-  id: number | string;
-
-  @Column
   createdDate: number = new Date().getTime();
 
   @Column

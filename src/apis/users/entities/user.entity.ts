@@ -4,6 +4,9 @@ import { BaseEntity } from 'src/common/entity';
 @Table
 export class User extends BaseEntity {
   @Column
+  id: string;
+
+  @Column
   roleId: number = 0;
 
   @Column
