@@ -4,7 +4,7 @@ import { BaseEntity } from "src/common/entity";
 @Table
 export class PostComment extends BaseEntity {
   @Column
-  id: string;
+  id?: string;
 
   @Column
   postId: string;

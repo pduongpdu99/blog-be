@@ -5,7 +5,7 @@ import { PostStatus } from '../posts.enum';
 @Table
 export class Post extends BaseEntity {
   @Column
-  id: string;
+  id?: string;
 
   @Column
   authorId: string;

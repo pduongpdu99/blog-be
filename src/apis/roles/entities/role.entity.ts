@@ -4,7 +4,6 @@ import { BaseEntity } from 'src/common/entity';
 @Table
 export class Role extends BaseEntity {
   @Column
-  @AutoIncrement
   id: number;
 
   @Column

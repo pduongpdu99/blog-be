@@ -4,7 +4,6 @@ import { BaseEntity } from 'src/common/entity';
 @Table
 export class Comment extends BaseEntity {
   @Column
-  @AutoIncrement
   id: number;
 
   @Column
