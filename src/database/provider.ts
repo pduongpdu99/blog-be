@@ -17,7 +17,16 @@ export const databaseProviders = [
   {
     provide: 'SEQUELIZE_MODELS',
     useFactory: async () => {
-      const sequelize = new Sequelize(process.env.MYSQL_URI);
+      const sequelize = new Sequelize(
+        process.env.MYSQL_DATABASE,
+        process.env.MYSQL_USERNAME,
+        process.env.MYSQL_PASSWORD,
+        {
+          host: process.env.MYSQL_HOSTNAME,
+          port: parseInt(process.env.MYSQL_PORT || '3306'),
+          dialect: 'mysql',
+        },
+      );
 
       // add model
       sequelize.addModels([
