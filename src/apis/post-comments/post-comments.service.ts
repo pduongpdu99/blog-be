@@ -1,26 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import PROVIDE_NAME from 'src/common/provide-name';
+import { BaseService } from '../bases/base.service';
+import { PostComment } from '../entities.index';
 import { CreatePostCommentDto } from './dto/create-post-comment.dto';
 import { UpdatePostCommentDto } from './dto/update-post-comment.dto';
 
 @Injectable()
-export class PostCommentsService {
-  create(createPostCommentDto: CreatePostCommentDto) {
-    return 'This action adds a new postComment';
-  }
-
-  findAll() {
-    return `This action returns all postComments`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} postComment`;
-  }
-
-  update(id: number, updatePostCommentDto: UpdatePostCommentDto) {
-    return `This action updates a #${id} postComment`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} postComment`;
+export class PostCommentsService extends BaseService<
+  CreatePostCommentDto,
+  UpdatePostCommentDto,
+  number
+> {
+  constructor(
+    @Inject(PROVIDE_NAME.POST_COMMENT_REPOSITORY)
+    postCommentRepository: typeof PostComment,
+  ) {
+    super(postCommentRepository);
   }
 }
