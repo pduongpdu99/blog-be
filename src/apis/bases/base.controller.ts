@@ -1,20 +1,11 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { BaseService } from './base.service';
 
-@Controller('users')
-export class UsersController<DtoTemplate> {
-  constructor(private readonly baseService: BaseService<DtoTemplate>) {}
+export class BaseController<T> {
+  constructor(private readonly baseService: BaseService<any, any, any>) {}
 
   @Post()
-  create(@Body() createUserDto: DtoTemplate) {
+  create(@Body() createUserDto: any) {
     return this.baseService.create(createUserDto);
   }
 
@@ -24,17 +15,17 @@ export class UsersController<DtoTemplate> {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: any) {
     return this.baseService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: DtoTemplate) {
+  update(@Param('id') id: any, @Body() updateUserDto: any) {
     return this.baseService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: any) {
     return this.baseService.remove(id);
   }
 }
