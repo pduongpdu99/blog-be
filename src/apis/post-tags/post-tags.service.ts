@@ -1,26 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Post } from '@nestjs/common';
+import PROVIDE_NAME from 'src/common/provide-name';
+import { BaseService } from '../bases/base.service';
+import { PostTag } from '../entities.index';
 import { CreatePostTagDto } from './dto/create-post-tag.dto';
 import { UpdatePostTagDto } from './dto/update-post-tag.dto';
 
 @Injectable()
-export class PostTagsService {
-  create(createPostTagDto: CreatePostTagDto) {
-    return 'This action adds a new postTag';
-  }
-
-  findAll() {
-    return `This action returns all postTags`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} postTag`;
-  }
-
-  update(id: number, updatePostTagDto: UpdatePostTagDto) {
-    return `This action updates a #${id} postTag`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} postTag`;
+export class PostTagsService extends BaseService<
+  CreatePostTagDto,
+  UpdatePostTagDto,
+  number
+> {
+  constructor(
+    @Inject(PROVIDE_NAME.POST_TAG_REPOSITORY)
+    postTagRepository: typeof PostTag,
+  ) {
+    super(postTagRepository);
   }
 }
