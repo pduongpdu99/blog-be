@@ -1,6 +1,7 @@
-import { IsNumber, IsOptional, IsString } from "@nestjs/class-validator";
+import { IsNumber, IsOptional, IsString } from '@nestjs/class-validator';
+import { BaseDto } from 'src/common/dto';
 
-export class CreateQuestionDto {
+export class CreateQuestionDto extends BaseDto {
   @IsNumber()
   @IsOptional()
   id?: number;
