@@ -12,7 +12,7 @@ export class RolesService extends BaseService<
   number
 > {
   constructor(
-    @Inject(PROVIDE_NAME.TAG_REPOSITORY) private roleRepository: typeof Role,
+    @Inject(PROVIDE_NAME.ROLE_REPOSITORY) private roleRepository: typeof Role,
   ) {
     super(roleRepository);
   }
