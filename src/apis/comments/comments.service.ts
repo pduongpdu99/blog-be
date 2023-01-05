@@ -12,7 +12,7 @@ export class CommentsService extends BaseService<
   number
 > {
   constructor(
-    @Inject(PROVIDE_NAME.PERMISSION_REPOSITORY)
+    @Inject(PROVIDE_NAME.COMMENT_REPOSITORY)
     commentRepository: typeof Comment,
   ) {
     super(commentRepository);

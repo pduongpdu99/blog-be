@@ -12,7 +12,7 @@ export class PostCategoriesService extends BaseService<
   number
 > {
   constructor(
-    @Inject(PROVIDE_NAME.POST_TAG_REPOSITORY)
+    @Inject(PROVIDE_NAME.POST_CATEGORY_REPOSITORY)
     postCategoryRepository: typeof PostCategory,
   ) {
     super(postCategoryRepository);
