@@ -13,7 +13,7 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    * @returns
    */
   async create(createUserDto: CreateDtoTemplate) {
-    return 'This action adds a new user';
+    return await this.repository.create(createUserDto);
   }
 
   /**
@@ -21,8 +21,7 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    * @returns
    */
   async findAll() {
-    const response = await this.repository.findAll();
-    return response;
+    return await this.repository.findAll();
   }
 
   /**
@@ -31,7 +30,9 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    * @returns
    */
   async findOne(id: T) {
-    return `This action returns a #${id} user`;
+    return await this.repository.findOne({
+      where: { id },
+    });
   }
 
   /**
@@ -41,7 +42,9 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    * @returns
    */
   async update(id: T, updateUserDto: UpdateDtoTemplate) {
-    return `This action updates a #${id} user`;
+    return await this.repository.update(updateUserDto, {
+      where: { id },
+    });
   }
 
   /**
@@ -50,6 +53,6 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    * @returns
    */
   async remove(id: T) {
-    return `This action removes a #${id} user`;
+    return await this.repository.destroy({ where: { id } });
   }
 }
