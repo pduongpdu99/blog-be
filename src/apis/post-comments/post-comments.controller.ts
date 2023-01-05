@@ -18,17 +18,17 @@ export class PostCommentsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postCommentsService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.postCommentsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostCommentDto: UpdatePostCommentDto) {
-    return this.postCommentsService.update(+id, updatePostCommentDto);
+  update(@Param('id') id: number, @Body() updatePostCommentDto: UpdatePostCommentDto) {
+    return this.postCommentsService.update(id, updatePostCommentDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postCommentsService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.postCommentsService.remove(id);
   }
 }

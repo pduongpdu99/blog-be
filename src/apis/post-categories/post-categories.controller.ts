@@ -18,17 +18,17 @@ export class PostCategoriesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postCategoriesService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.postCategoriesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostCategoryDto: UpdatePostCategoryDto) {
-    return this.postCategoriesService.update(+id, updatePostCategoryDto);
+  update(@Param('id') id: number, @Body() updatePostCategoryDto: UpdatePostCategoryDto) {
+    return this.postCategoriesService.update(id, updatePostCategoryDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postCategoriesService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.postCategoriesService.remove(id);
   }
 }
