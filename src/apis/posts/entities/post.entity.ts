@@ -7,22 +7,22 @@ export class Post extends BaseEntity {
   @Column({ primaryKey: true })
   id: string;
 
-  @Column
+  @Column({ type: DataType.STRING })
   authorId: string;
 
-  @Column
+  @Column({ type: DataType.BIGINT })
   tagId: number;
 
-  @Column
+  @Column({ type: DataType.BIGINT })
   categoryId: number;
 
-  @Column
+  @Column({ type: DataType.STRING(50) })
   title: string;
 
-  @Column
+  @Column({ type: DataType.STRING(200) })
   description: string;
 
-  @Column
+  @Column({ type: DataType.TEXT })
   content: string;
 
   @Column
