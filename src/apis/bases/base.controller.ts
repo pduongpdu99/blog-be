@@ -1,7 +1,7 @@
 import { Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { BaseService } from './base.service';
 
-export class BaseController<T> {
+export class BaseController {
   constructor(private readonly baseService: BaseService<any, any, any>) {}
 
   @Post()
