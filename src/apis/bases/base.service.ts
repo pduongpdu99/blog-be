@@ -1,5 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { HttpResponse } from './base.exception';
 
 @Injectable()
@@ -19,35 +18,10 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
       where: { ...fieldForCheckExists },
     });
     if (data)
-      throw new HttpException(
+      throw new HttpResponse(
         'Cannot create record when it exist',
         HttpStatus.CONFLICT,
       );
-
-    if (dto instanceof CreateUserDto) {
-      function guidGenerator() {
-        var S4 = function () {
-          return (((1 + Math.random()) * 0x10000) | 0)
-            .toString(16)
-            .substring(1);
-        };
-        return (
-          S4() +
-          S4() +
-          '-' +
-          S4() +
-          '-' +
-          S4() +
-          '-' +
-          S4() +
-          '-' +
-          S4() +
-          S4() +
-          S4()
-        );
-      }
-      dto.id = guidGenerator();
-    }
 
     return new HttpResponse(
       'Getting all record successfully',
@@ -76,11 +50,11 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    */
   async findOne(id: T) {
     if (typeof id === 'string' && !id.match(/^[a-zA-Z0-9]{1,}$/g)) {
-      throw new HttpException('id is not valid string', HttpStatus.BAD_REQUEST);
+      throw new HttpResponse('id is not valid string', HttpStatus.BAD_REQUEST);
     }
 
     if (typeof id === 'number' && !id.toString().match(/^\d+$/g)) {
-      throw new HttpException('id is not valid number', HttpStatus.BAD_REQUEST);
+      throw new HttpResponse('id is not valid number', HttpStatus.BAD_REQUEST);
     }
 
     const response = await this.repository.findOne({
@@ -110,7 +84,7 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
   async remove(id: T) {
     const data = await this.repository.findOne({ where: { id } });
     if (!data)
-      throw new HttpException(
+      throw new HttpResponse(
         'Cannot update record when it not exist',
         HttpStatus.BAD_REQUEST,
       );
