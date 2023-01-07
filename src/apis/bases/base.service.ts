@@ -1,10 +1,5 @@
-import {
-  BadRequestException,
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpResponse } from './base.exception';
 
 @Injectable()
 export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
@@ -15,11 +10,24 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
 
   /**
    * create data based on dto
-   * @param createUserDto
+   * @param dto
    * @returns
    */
-  async create(createUserDto: CreateDtoTemplate) {
-    return await this.repository.create(createUserDto);
+  async create(dto: CreateDtoTemplate, fieldForCheckExists?: any) {
+    const data = await this.repository.findOne({
+      where: { ...fieldForCheckExists },
+    });
+    if (data)
+      throw new HttpException(
+        'Cannot create record when it exist',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    return new HttpResponse(
+      'Getting all record successfully',
+      HttpStatus.CREATED,
+      await this.repository.create(dto),
+    );
   }
 
   /**
@@ -27,7 +35,12 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    * @returns
    */
   async findAll() {
-    return await this.repository.findAll();
+    const response = await this.repository.findAll();
+    return new HttpResponse(
+      'Getting all record successfully',
+      HttpStatus.OK,
+      response,
+    );
   }
 
   /**
@@ -36,8 +49,7 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    * @returns
    */
   async findOne(id: T) {
-    console.log(id);
-    if (typeof id === 'string' && !id.match(/^(a-zA-Z0-9){1,}$/g)) {
+    if (typeof id === 'string' && !id.match(/^[a-zA-Z0-9]{1,}$/g)) {
       throw new HttpException('id is not valid string', HttpStatus.BAD_REQUEST);
     }
 
@@ -45,21 +57,23 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
       throw new HttpException('id is not valid number', HttpStatus.BAD_REQUEST);
     }
 
-    return await this.repository.findOne({
+    const response = await this.repository.findOne({
       where: { id },
     });
+    return new HttpResponse('Get user by id', HttpStatus.OK, response);
   }
 
   /**
    * update by id
    * @param id
-   * @param updateUserDto
+   * @param dto
    * @returns
    */
-  async update(id: T, updateUserDto: UpdateDtoTemplate) {
-    return await this.repository.update(updateUserDto, {
+  async update(id: T, dto: UpdateDtoTemplate) {
+    const response = await this.repository.update(dto, {
       where: { id },
     });
+    return new HttpResponse('Get user by id', HttpStatus.ACCEPTED, response);
   }
 
   /**
@@ -68,6 +82,14 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    * @returns
    */
   async remove(id: T) {
-    return await this.repository.destroy({ where: { id } });
+    const data = await this.repository.findOne({ where: { id } });
+    if (!data)
+      throw new HttpException(
+        'Cannot update record when it not exist',
+        HttpStatus.BAD_REQUEST,
+      );
+    this.repository.update({ where: { deletedDate: new Date().getTime() } });
+
+    return new HttpResponse('Delete successfully', HttpStatus.ACCEPTED);
   }
 }

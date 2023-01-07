@@ -1,12 +1,4 @@
-import {
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  HttpException,
-} from '@nestjs/common';
+import { Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { BaseService } from './base.service';
 
 export class BaseController {
@@ -35,7 +27,6 @@ export class BaseController {
     try {
       return this.baseService.findOne(id);
     } catch (error: any) {
-      console.log(error);
       return error;
     }
   }
