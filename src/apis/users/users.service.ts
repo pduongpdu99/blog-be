@@ -25,7 +25,7 @@ export class UsersService extends BaseService<
    * @returns
    */
   async create(dto: CreateUserDto, fieldForCheckExists?: any) {
-    const data = await this.repository.findOne({
+    const data = await this.userRepository.findOne({
       where: { ...fieldForCheckExists },
     });
     if (data)
@@ -39,7 +39,7 @@ export class UsersService extends BaseService<
     return new HttpResponse(
       'Getting all record successfully',
       HttpStatus.CREATED,
-      await this.repository.create(dto),
+      await this.userRepository.create({ ...dto }),
     );
   }
 }
