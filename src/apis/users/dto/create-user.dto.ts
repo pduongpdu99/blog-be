@@ -2,6 +2,10 @@ import { IsNumber, IsOptional, IsString } from '@nestjs/class-validator';
 import { BaseDto } from 'src/common/dto';
 
 export class CreateUserDto extends BaseDto {
+  @IsString()
+  @IsOptional()
+  id?: string;
+
   @IsNumber()
   roleId?: number = 0;
 
