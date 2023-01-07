@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 import { HttpResponse } from './base.exception';
 
 @Injectable()
@@ -22,6 +23,31 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
         'Cannot create record when it exist',
         HttpStatus.CONFLICT,
       );
+
+    if (dto instanceof CreateUserDto) {
+      function guidGenerator() {
+        var S4 = function () {
+          return (((1 + Math.random()) * 0x10000) | 0)
+            .toString(16)
+            .substring(1);
+        };
+        return (
+          S4() +
+          S4() +
+          '-' +
+          S4() +
+          '-' +
+          S4() +
+          '-' +
+          S4() +
+          '-' +
+          S4() +
+          S4() +
+          S4()
+        );
+      }
+      dto.id = guidGenerator();
+    }
 
     return new HttpResponse(
       'Getting all record successfully',
