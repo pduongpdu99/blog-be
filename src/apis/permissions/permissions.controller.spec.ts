@@ -1,18 +1,20 @@
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import PROVIDE_NAME from 'src/common/provide-name';
-import { Permission } from '../entities.index';
+import { DatabaseModule } from 'src/database/module';
 import { PermissionsController } from './permissions.controller';
-import { PermissionsService } from './permissions.service';
+import { PermissionsModule } from './permissions.module';
 
 describe('PermissionsController', () => {
   let controller: PermissionsController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [PermissionsController],
-      providers: [
-        PermissionsService,
-        { provide: PROVIDE_NAME.PERMISSION_REPOSITORY, useValue: Permission },
+      imports: [
+        PermissionsModule,
+        ConfigModule.forRoot({
+          envFilePath: '.development.env',
+        }),
+        DatabaseModule,
       ],
     }).compile();
 

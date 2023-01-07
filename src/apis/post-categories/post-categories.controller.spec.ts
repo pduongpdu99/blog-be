@@ -1,7 +1,10 @@
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import PROVIDE_NAME from 'src/common/provide-name';
+import { DatabaseModule } from 'src/database/module';
 import { PostCategory } from '../entities.index';
 import { PostCategoriesController } from './post-categories.controller';
+import { PostCategoriesModule } from './post-categories.module';
 import { PostCategoriesService } from './post-categories.service';
 
 describe('PostCategoriesController', () => {
@@ -9,13 +12,12 @@ describe('PostCategoriesController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [PostCategoriesController],
-      providers: [
-        PostCategoriesService,
-        {
-          provide: PROVIDE_NAME.POST_CATEGORY_REPOSITORY,
-          useValue: PostCategory,
-        },
+      imports: [
+        PostCategoriesModule,
+        ConfigModule.forRoot({
+          envFilePath: '.development.env',
+        }),
+        DatabaseModule,
       ],
     }).compile();
 

@@ -1,18 +1,20 @@
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import PROVIDE_NAME from 'src/common/provide-name';
-import { Role } from '../entities.index';
+import { DatabaseModule } from 'src/database/module';
 import { RolesController } from './roles.controller';
-import { RolesService } from './roles.service';
+import { RolesModule } from './roles.module';
 
 describe('RolesController', () => {
   let controller: RolesController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [RolesController],
-      providers: [
-        RolesService,
-        { provide: PROVIDE_NAME.ROLE_REPOSITORY, useValue: Role },
+      imports: [
+        RolesModule,
+        ConfigModule.forRoot({
+          envFilePath: '.development.env',
+        }),
+        DatabaseModule,
       ],
     }).compile();
 

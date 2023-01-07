@@ -1,18 +1,20 @@
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import PROVIDE_NAME from 'src/common/provide-name';
-import { Tag } from '../entities.index';
+import { DatabaseModule } from 'src/database/module';
 import { TagsController } from './tags.controller';
-import { TagsService } from './tags.service';
+import { TagsModule } from './tags.module';
 
 describe('TagsController', () => {
   let controller: TagsController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [TagsController],
-      providers: [
-        TagsService,
-        { provide: PROVIDE_NAME.TAG_REPOSITORY, useValue: Tag },
+      imports: [
+        TagsModule,
+        ConfigModule.forRoot({
+          envFilePath: '.development.env',
+        }),
+        DatabaseModule,
       ],
     }).compile();
 

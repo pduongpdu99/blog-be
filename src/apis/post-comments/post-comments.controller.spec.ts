@@ -1,21 +1,20 @@
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import PROVIDE_NAME from 'src/common/provide-name';
-import { PostComment } from '../entities.index';
+import { DatabaseModule } from 'src/database/module';
 import { PostCommentsController } from './post-comments.controller';
-import { PostCommentsService } from './post-comments.service';
+import { PostCommentsModule } from './post-comments.module';
 
 describe('PostCommentsController', () => {
   let controller: PostCommentsController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [PostCommentsController],
-      providers: [
-        PostCommentsService,
-        {
-          provide: PROVIDE_NAME.POST_COMMENT_REPOSITORY,
-          useValue: PostComment,
-        },
+      imports: [
+        PostCommentsModule,
+        ConfigModule.forRoot({
+          envFilePath: '.development.env',
+        }),
+        DatabaseModule,
       ],
     }).compile();
 

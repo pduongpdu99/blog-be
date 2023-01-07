@@ -1,18 +1,20 @@
-import { Post } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import PROVIDE_NAME from 'src/common/provide-name';
+import { DatabaseModule } from 'src/database/module';
 import { PostsController } from './posts.controller';
-import { PostsService } from './posts.service';
+import { PostsModule } from './posts.module';
 
 describe('PostsController', () => {
   let controller: PostsController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [PostsController],
-      providers: [
-        PostsService,
-        { provide: PROVIDE_NAME.POST_REPOSITORY, useValue: Post },
+      imports: [
+        PostsModule,
+        ConfigModule.forRoot({
+          envFilePath: '.development.env',
+        }),
+        DatabaseModule,
       ],
     }).compile();
 
