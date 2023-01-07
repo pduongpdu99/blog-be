@@ -20,7 +20,7 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
     if (data)
       throw new HttpException(
         'Cannot create record when it exist',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.CONFLICT,
       );
 
     return new HttpResponse(
