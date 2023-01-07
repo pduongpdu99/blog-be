@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import PROVIDE_NAME from 'src/common/provide-name';
+import { PostCategory } from '../entities.index';
 import { PostCategoriesService } from './post-categories.service';
 
 describe('PostCategoriesService', () => {
@@ -6,7 +8,13 @@ describe('PostCategoriesService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PostCategoriesService],
+      providers: [
+        PostCategoriesService,
+        {
+          provide: PROVIDE_NAME.POST_CATEGORY_REPOSITORY,
+          useValue: PostCategory,
+        },
+      ],
     }).compile();
 
     service = module.get<PostCategoriesService>(PostCategoriesService);

@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import PROVIDE_NAME from 'src/common/provide-name';
+import { Tag } from '../entities.index';
 import { TagsService } from './tags.service';
 
 describe('TagsService', () => {
@@ -6,7 +8,10 @@ describe('TagsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [TagsService],
+      providers: [
+        TagsService,
+        { provide: PROVIDE_NAME.TAG_REPOSITORY, useValue: Tag },
+      ],
     }).compile();
 
     service = module.get<TagsService>(TagsService);
