@@ -3,7 +3,11 @@ import { BaseEntity } from 'src/common/entity';
 
 @Table
 export class User extends BaseEntity {
-  @Column({ primaryKey: true, type: DataType.STRING })
+  @Column({
+    primaryKey: true,
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4,
+  })
   id: string;
 
   @Column({ type: DataType.BIGINT })
