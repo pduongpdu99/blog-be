@@ -70,10 +70,27 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    * @returns
    */
   async update(id: T, dto: UpdateDtoTemplate) {
+    if (typeof id === 'string' && !id.match(/^[a-zA-Z0-9]{1,}$/g)) {
+      throw new HttpResponse('id is not valid string', HttpStatus.BAD_REQUEST);
+    }
+
+    if (typeof id === 'number' && !id.toString().match(/^\d+$/g)) {
+      throw new HttpResponse('id is not valid number', HttpStatus.BAD_REQUEST);
+    }
+
+    const check = await this.repository.findOne({
+      where: { id },
+    });
+
+    if (!check) {
+      throw new HttpResponse('user is not existed', HttpStatus.BAD_REQUEST);
+    }
+
     const response = await this.repository.update(dto, {
       where: { id },
     });
-    return new HttpResponse('Get user by id', HttpStatus.ACCEPTED, response);
+
+    return new HttpResponse('Get user by id', HttpStatus.OK, response);
   }
 
   /**
@@ -90,6 +107,6 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
       );
     this.repository.update({ where: { deletedDate: new Date().getTime() } });
 
-    return new HttpResponse('Delete successfully', HttpStatus.ACCEPTED);
+    return new HttpResponse('Delete successfully', HttpStatus.OK);
   }
 }
