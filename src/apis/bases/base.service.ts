@@ -1,4 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 
 @Injectable()
 export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
@@ -30,6 +36,15 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    * @returns
    */
   async findOne(id: T) {
+    console.log(id);
+    if (typeof id === 'string' && !id.match(/^(a-zA-Z0-9){1,}$/g)) {
+      throw new HttpException('id is not valid string', HttpStatus.BAD_REQUEST);
+    }
+
+    if (typeof id === 'number' && !id.toString().match(/^\d+$/g)) {
+      throw new HttpException('id is not valid number', HttpStatus.BAD_REQUEST);
+    }
+
     return await this.repository.findOne({
       where: { id },
     });
