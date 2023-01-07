@@ -1,13 +1,12 @@
+import { INestApplication } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import PROVIDE_NAME from 'src/common/provide-name';
 import { DatabaseModule } from 'src/database/module';
-import { PostCategory } from '../entities.index';
 import { PostCategoriesController } from './post-categories.controller';
 import { PostCategoriesModule } from './post-categories.module';
-import { PostCategoriesService } from './post-categories.service';
 
 describe('PostCategoriesController', () => {
+  let app: INestApplication;
   let controller: PostCategoriesController;
 
   beforeEach(async () => {
@@ -22,6 +21,8 @@ describe('PostCategoriesController', () => {
     }).compile();
 
     controller = module.get<PostCategoriesController>(PostCategoriesController);
+    app = module.createNestApplication();
+    await app.init();
   });
 
   it('should be defined', () => {

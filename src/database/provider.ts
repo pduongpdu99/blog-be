@@ -25,6 +25,7 @@ export const databaseProviders = [
           host: process.env.MYSQL_HOSTNAME,
           port: parseInt(process.env.MYSQL_PORT || '3306'),
           dialect: 'mysql',
+          logging: false,
         },
       );
 

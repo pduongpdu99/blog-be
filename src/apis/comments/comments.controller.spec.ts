@@ -1,3 +1,4 @@
+import { INestApplication } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { DatabaseModule } from 'src/database/module';
@@ -5,6 +6,7 @@ import { CommentsController } from './comments.controller';
 import { CommentsModule } from './comments.module';
 
 describe('CommentsController', () => {
+  let app: INestApplication;
   let controller: CommentsController;
 
   beforeEach(async () => {
@@ -19,6 +21,8 @@ describe('CommentsController', () => {
     }).compile();
 
     controller = module.get<CommentsController>(CommentsController);
+    app = module.createNestApplication();
+    await app.init();
   });
 
   it('should be defined', () => {

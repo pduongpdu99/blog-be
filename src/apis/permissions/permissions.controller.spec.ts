@@ -1,3 +1,4 @@
+import { INestApplication } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { DatabaseModule } from 'src/database/module';
@@ -5,6 +6,7 @@ import { PermissionsController } from './permissions.controller';
 import { PermissionsModule } from './permissions.module';
 
 describe('PermissionsController', () => {
+  let app: INestApplication;
   let controller: PermissionsController;
 
   beforeEach(async () => {
@@ -19,6 +21,8 @@ describe('PermissionsController', () => {
     }).compile();
 
     controller = module.get<PermissionsController>(PermissionsController);
+    app = module.createNestApplication();
+    await app.init();
   });
 
   it('should be defined', () => {
