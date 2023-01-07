@@ -13,16 +13,16 @@ export class User extends BaseEntity {
   id: string;
 
   @Column({ type: DataType.BIGINT })
-  roleId: number = 0;
+  roleId?: number = 0;
 
-  @Column({ type: DataType.BIGINT })
-  categoryId: number;
+  @Column({ type: DataType.STRING })
+  categoryIds: string | null = null;
 
   @Column({ type: DataType.STRING(10) })
   firstname: string;
 
   @Column({ type: DataType.STRING(10) })
-  middlename: string;
+  middlename?: string;
 
   @Column({ type: DataType.STRING(10) })
   lastname: string;
@@ -34,5 +34,5 @@ export class User extends BaseEntity {
   hash: string;
 
   @Column({ type: DataType.STRING(500) })
-  bio: string;
+  bio?: string;
 }

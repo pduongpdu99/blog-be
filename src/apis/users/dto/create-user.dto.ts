@@ -3,16 +3,16 @@ import { BaseDto } from 'src/common/dto';
 
 export class CreateUserDto extends BaseDto {
   @IsNumber()
-  roleId: number = 0;
+  roleId?: number = 0;
 
-  @IsNumber()
-  categoryId: number;
+  @IsString()
+  categoryIds: string | null = null;
 
   @IsString()
   firstname: string;
 
   @IsString()
-  middlename: string;
+  middlename?: string;
 
   @IsString()
   lastname: string;
@@ -24,5 +24,5 @@ export class CreateUserDto extends BaseDto {
   hash: string;
 
   @IsString()
-  bio: string;
+  bio?: string;
 }
