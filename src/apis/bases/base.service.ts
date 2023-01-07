@@ -1,4 +1,5 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { Op } from 'sequelize';
 import { HttpResponse } from './base.exception';
 
 @Injectable()
@@ -35,7 +36,10 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    * @returns
    */
   async findAll() {
-    const response = await this.repository.findAll();
+    const response = await this.repository.findAll({
+      where: { deletedDate: { [Op.ne]: null } },
+    });
+
     return new HttpResponse(
       'Getting all record successfully',
       HttpStatus.OK,
@@ -105,7 +109,12 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
         'Cannot update record when it not exist',
         HttpStatus.BAD_REQUEST,
       );
-    this.repository.update({ where: { deletedDate: new Date().getTime() } });
+    this.repository.update(
+      { deletedDate: new Date().getTime() },
+      {
+        where: { id },
+      },
+    );
 
     return new HttpResponse('Delete successfully', HttpStatus.OK);
   }
