@@ -1,10 +1,4 @@
-import {
-  Table,
-  Column,
-  PrimaryKey,
-  AutoIncrement,
-  DataType,
-} from 'sequelize-typescript';
+import { Table, Column, DataType } from 'sequelize-typescript';
 import { BaseEntity } from 'src/common/entity';
 
 @Table
