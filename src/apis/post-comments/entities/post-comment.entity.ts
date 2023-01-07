@@ -3,13 +3,17 @@ import { BaseEntity } from 'src/common/entity';
 
 @Table
 export class PostComment extends BaseEntity {
-  @Column({ primaryKey: true })
+  @Column({
+    primaryKey: true,
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4,
+  })
   id: string;
 
-  @Column({ type: DataType.STRING })
+  @Column({ type: DataType.UUID })
   postId: string;
 
-  @Column({ type: DataType.STRING })
+  @Column({ type: DataType.UUID })
   parentId: string;
 
   @Column({ type: DataType.TEXT })

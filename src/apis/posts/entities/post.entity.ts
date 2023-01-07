@@ -4,10 +4,14 @@ import { PostStatus } from '../posts.enum';
 
 @Table
 export class Post extends BaseEntity {
-  @Column({ primaryKey: true })
+  @Column({
+    primaryKey: true,
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4,
+  })
   id: string;
 
-  @Column({ type: DataType.STRING })
+  @Column({ type: DataType.UUID })
   authorId: string;
 
   @Column({ type: DataType.BIGINT })

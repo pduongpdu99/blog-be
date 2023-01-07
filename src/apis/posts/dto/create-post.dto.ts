@@ -1,10 +1,15 @@
-import { IsNumber, IsOptional, IsString, IsEnum } from "@nestjs/class-validator";
-import { PostStatus } from "../posts.enum";
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsEnum,
+} from '@nestjs/class-validator';
+import { PostStatus } from '../posts.enum';
 
 export class CreatePostDto {
-  @IsNumber()
+  @IsString()
   @IsOptional()
-  id?: number;
+  id?: string;
 
   @IsString()
   authorId: string;

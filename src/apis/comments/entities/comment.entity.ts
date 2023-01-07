@@ -6,7 +6,7 @@ export class Comment extends BaseEntity {
   @Column({ primaryKey: true, type: DataType.BIGINT, autoIncrement: true })
   id: number;
 
-  @Column({ type: DataType.STRING })
+  @Column({ type: DataType.UUID })
   userId: string;
 
   @Column({ type: DataType.BIGINT })
