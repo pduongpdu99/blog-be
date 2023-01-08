@@ -31,6 +31,9 @@ export class User extends BaseEntity {
   @Column({ type: DataType.STRING })
   hash: string;
 
+  @Column({ type: DataType.STRING })
+  refreshToken: string;
+
   @Column({ type: DataType.STRING(500) })
   bio?: string;
 }

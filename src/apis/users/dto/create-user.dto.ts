@@ -28,5 +28,8 @@ export class CreateUserDto extends BaseDto {
   hash: string;
 
   @IsString()
+  refreshToken?: string;
+
+  @IsString()
   bio?: string;
 }
