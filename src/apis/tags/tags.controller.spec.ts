@@ -34,27 +34,6 @@ describe('TagsController', () => {
     });
   });
 
-  describe('GET http method', () => {
-    // Get all
-    describe('get all tags record', () => {
-      it('getting all tags record', async () => {
-        return request(app.getHttpServer()).get('/tags').expect(200);
-      });
-    });
-
-    // Get by id
-    describe('Get tags by id', () => {
-      const testcases = [1, 2, 100000, 'abc', '12', 'x:x', 'duong@'];
-      testcases.forEach((testcase) => {
-        it(`get tags record by id (testcase: ${testcase})`, () => {
-          return request(app.getHttpServer())
-            .get(`/tags/${testcase}`)
-            .expect(HttpStatus.OK);
-        });
-      });
-    });
-  });
-
   describe('POST http method', () => {
     const testcases: CreateTagDto[] = [
       {
@@ -128,6 +107,27 @@ describe('TagsController', () => {
     });
   });
 
+  describe('GET http method', () => {
+    // Get all
+    describe('get all tags record', () => {
+      it('getting all tags record', async () => {
+        return request(app.getHttpServer()).get('/tags').expect(200);
+      });
+    });
+
+    // Get by id
+    describe('Get tags by id', () => {
+      const testcases = [1, 2, 100000, 'abc', '12', 'x:x', 'duong@'];
+      testcases.forEach((testcase) => {
+        it(`get tags record by id (testcase: ${testcase})`, () => {
+          return request(app.getHttpServer())
+            .get(`/tags/${testcase}`)
+            .expect(HttpStatus.OK);
+        });
+      });
+    });
+  });
+
   describe('DELETE http method', () => {
     describe('Remove all tags ids created', () => {
       [1, 2, 3, 4, 5].forEach((id) => {
@@ -138,5 +138,9 @@ describe('TagsController', () => {
         });
       });
     });
+  });
+
+  afterEach(() => {
+    app.close();
   });
 });

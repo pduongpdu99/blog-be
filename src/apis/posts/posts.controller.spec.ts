@@ -35,27 +35,6 @@ describe('PostsController', () => {
     });
   });
 
-  describe('GET http method', () => {
-    // Get all
-    describe('get all posts record', () => {
-      it('getting all posts record', async () => {
-        return request(app.getHttpServer()).get('/posts').expect(200);
-      });
-    });
-
-    // Get by id
-    describe('Get posts by id', () => {
-      const testcases = [1, 2, 100000, 'abc', '12', 'x:x', 'duong@'];
-      testcases.forEach((testcase) => {
-        it(`get posts record by id (testcase: ${testcase})`, () => {
-          return request(app.getHttpServer())
-            .get(`/posts/${testcase}`)
-            .expect(HttpStatus.OK);
-        });
-      });
-    });
-  });
-
   describe('POST http method', () => {
     const testcases: CreatePostDto[] = [
       {
@@ -172,6 +151,27 @@ describe('PostsController', () => {
     });
   });
 
+  describe('GET http method', () => {
+    // Get all
+    describe('get all posts record', () => {
+      it('getting all posts record', async () => {
+        return request(app.getHttpServer()).get('/posts').expect(200);
+      });
+    });
+
+    // Get by id
+    describe('Get posts by id', () => {
+      const testcases = [1, 2, 100000, 'abc', '12', 'x:x', 'duong@'];
+      testcases.forEach((testcase) => {
+        it(`get posts record by id (testcase: ${testcase})`, () => {
+          return request(app.getHttpServer())
+            .get(`/posts/${testcase}`)
+            .expect(HttpStatus.OK);
+        });
+      });
+    });
+  });
+
   describe('DELETE http method', () => {
     describe('Remove all posts ids created', () => {
       [1, 2, 3, 4, 5].forEach((id) => {
@@ -182,5 +182,9 @@ describe('PostsController', () => {
         });
       });
     });
+  });
+
+  afterEach(() => {
+    app.close();
   });
 });

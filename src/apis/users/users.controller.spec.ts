@@ -34,27 +34,6 @@ describe('UsersController', () => {
     });
   });
 
-  describe('GET http method', () => {
-    // Get all
-    describe('get all user record', () => {
-      it('getting all user record', async () => {
-        return request(app.getHttpServer()).get('/users').expect(200);
-      });
-    });
-
-    // Get by id
-    describe('Get user by id', () => {
-      const testcases = [1, 2, 100000, 'abc', '12', 'x:x', 'duong@'];
-      testcases.forEach((testcase) => {
-        it(`get user record by id (testcase: ${testcase})`, () => {
-          return request(app.getHttpServer())
-            .get(`/users/${testcase}`)
-            .expect(HttpStatus.OK);
-        });
-      });
-    });
-  });
-
   describe('POST http method', () => {
     const hash = '$2a$10$2GWv9PAx1Mf235NxSUzLZuJmtKkC8nKkGEx9GCwwCy4PYE2OmUOKS';
 
@@ -141,6 +120,27 @@ describe('UsersController', () => {
           return request(app.getHttpServer())
             .patch(`/users/${id}`)
             .send(testcases[index])
+            .expect(HttpStatus.OK);
+        });
+      });
+    });
+  });
+
+  describe('GET http method', () => {
+    // Get all
+    describe('get all user record', () => {
+      it('getting all user record', async () => {
+        return request(app.getHttpServer()).get('/users').expect(200);
+      });
+    });
+
+    // Get by id
+    describe('Get user by id', () => {
+      const testcases = [1, 2, 100000, 'abc', '12', 'x:x', 'duong@'];
+      testcases.forEach((testcase) => {
+        it(`get user record by id (testcase: ${testcase})`, () => {
+          return request(app.getHttpServer())
+            .get(`/users/${testcase}`)
             .expect(HttpStatus.OK);
         });
       });

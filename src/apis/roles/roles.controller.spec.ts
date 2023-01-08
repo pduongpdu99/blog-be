@@ -34,27 +34,6 @@ describe('RolesController', () => {
     });
   });
 
-  describe('GET http method', () => {
-    // Get all
-    describe('get all roles record', () => {
-      it('getting all roles record', async () => {
-        return request(app.getHttpServer()).get('/roles').expect(200);
-      });
-    });
-
-    // Get by id
-    describe('Get roles by id', () => {
-      const testcases = [1, 2, 100000, 'abc', '12', 'x:x', 'duong@'];
-      testcases.forEach((testcase) => {
-        it(`get roles record by id (testcase: ${testcase})`, () => {
-          return request(app.getHttpServer())
-            .get(`/roles/${testcase}`)
-            .expect(HttpStatus.OK);
-        });
-      });
-    });
-  });
-
   describe('POST http method', () => {
     const testcases: CreateRoleDto[] = [
       {
@@ -123,6 +102,27 @@ describe('RolesController', () => {
     });
   });
 
+  describe('GET http method', () => {
+    // Get all
+    describe('get all roles record', () => {
+      it('getting all roles record', async () => {
+        return request(app.getHttpServer()).get('/roles').expect(200);
+      });
+    });
+
+    // Get by id
+    describe('Get roles by id', () => {
+      const testcases = [1, 2, 100000, 'abc', '12', 'x:x', 'duong@'];
+      testcases.forEach((testcase) => {
+        it(`get roles record by id (testcase: ${testcase})`, () => {
+          return request(app.getHttpServer())
+            .get(`/roles/${testcase}`)
+            .expect(HttpStatus.OK);
+        });
+      });
+    });
+  });
+
   describe('DELETE http method', () => {
     describe('Remove all roles ids created', () => {
       [1, 2, 3, 4, 5].forEach((id) => {
@@ -133,5 +133,9 @@ describe('RolesController', () => {
         });
       });
     });
+  });
+
+  afterEach(() => {
+    app.close();
   });
 });

@@ -1,4 +1,5 @@
 import { Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { HttpResponse } from './base.exception';
 import { BaseService } from './base.service';
 
 export class BaseController {
@@ -9,7 +10,7 @@ export class BaseController {
     try {
       return this.baseService.create(createUserDto);
     } catch (error: any) {
-      return error;
+      return new HttpResponse(error.message, error.status);
     }
   }
 
@@ -18,7 +19,7 @@ export class BaseController {
     try {
       return this.baseService.findAll();
     } catch (error: any) {
-      return error;
+      return new HttpResponse(error.message, error.status);
     }
   }
 
@@ -27,7 +28,7 @@ export class BaseController {
     try {
       return this.baseService.findOne(id);
     } catch (error: any) {
-      return error;
+      return new HttpResponse(error.message, error.status);
     }
   }
 
@@ -36,7 +37,7 @@ export class BaseController {
     try {
       return this.baseService.update(id, updateUserDto);
     } catch (error: any) {
-      return error;
+      return new HttpResponse(error.message, error.status);
     }
   }
 
@@ -45,7 +46,7 @@ export class BaseController {
     try {
       return this.baseService.remove(id);
     } catch (error: any) {
-      return error;
+      return new HttpResponse(error.message, error.status);
     }
   }
 }
