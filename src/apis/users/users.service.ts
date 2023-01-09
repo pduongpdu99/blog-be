@@ -1,4 +1,4 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import PROVIDE_NAME from 'src/common/provide-name';
 import { HttpResponse } from '../bases/base.exception';
 import { BaseService } from '../bases/base.service';
@@ -29,7 +29,7 @@ export class UsersService extends BaseService<
       where: { ...fieldForCheckExists },
     });
     if (data)
-      throw new HttpResponse(
+      throw new HttpException(
         'Cannot create record when it exist',
         HttpStatus.CONFLICT,
       );
