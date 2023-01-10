@@ -10,30 +10,33 @@ export class User extends BaseEntity {
   })
   id: string;
 
-  @Column({ type: DataType.BIGINT })
+  @Column({ type: DataType.BIGINT, defaultValue: 0 })
   roleId?: number = 0;
 
-  @Column({ type: DataType.STRING })
+  @Column({ type: DataType.STRING, defaultValue: null })
   categoryIds: string | null = null;
 
   @Column({ type: DataType.STRING(10) })
   firstname: string;
 
-  @Column({ type: DataType.STRING(10) })
+  @Column({ type: DataType.STRING(10), allowNull: true })
   middlename?: string;
 
   @Column({ type: DataType.STRING(10) })
   lastname: string;
 
-  @Column({ type: DataType.STRING(50) })
+  @Column({ type: DataType.STRING(50), allowNull: false, unique: true })
   email: string;
 
   @Column({ type: DataType.STRING })
   hash: string;
 
-  @Column({ type: DataType.STRING })
-  refreshToken: string;
+  @Column({ type: DataType.STRING, allowNull: true })
+  refreshToken?: string;
 
-  @Column({ type: DataType.STRING(500) })
+  @Column({ type: DataType.STRING(500), allowNull: true })
   bio?: string;
+
+  @Column({ type: DataType.BIGINT, defaultValue: 24 * 3600, allowNull: true })
+  expireIns?: number = 24 * 3600; // seconds
 }

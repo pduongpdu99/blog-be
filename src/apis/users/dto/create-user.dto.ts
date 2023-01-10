@@ -10,7 +10,7 @@ export class CreateUserDto extends BaseDto {
   roleId?: number = 0;
 
   @IsString()
-  categoryIds: string | null = null;
+  categoryIds?: string | null = null;
 
   @IsString()
   firstname: string;
@@ -32,4 +32,8 @@ export class CreateUserDto extends BaseDto {
 
   @IsString()
   bio?: string;
+
+  @IsNumber()
+  @IsOptional()
+  expireIns?: number = 24 * 3600; // seconds
 }
