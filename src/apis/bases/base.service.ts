@@ -15,60 +15,67 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    * @return
    */
   async create(dto: CreateDtoTemplate, fieldForCheckExists?: any) {
-    // validate field FK id
-    if (
-      !(fieldForCheckExists == undefined || fieldForCheckExists == null) &&
-      Object.keys(fieldForCheckExists).length > 0
-    ) {
-      for (const key of Object.keys(fieldForCheckExists)) {
-        const isIdKeyValid = key.match(/^[a-zA-Z0-9]+Id$/g);
-        const isString = typeof fieldForCheckExists[key] === 'string';
-        const isStringValid = fieldForCheckExists[key].match(/^\w+$/g);
-        const isNumber = typeof fieldForCheckExists[key] === 'number';
-        const isNumberValid = fieldForCheckExists[key].match(/^\d+$/g);
-        if (!(isIdKeyValid && isString && isStringValid))
-          throw new HttpException(
-            'It is not string invalid',
-            HttpStatus.BAD_REQUEST,
-          );
+    try {
+      // validate field FK id
+      if (
+        !(fieldForCheckExists == undefined || fieldForCheckExists == null) &&
+        Object.keys(fieldForCheckExists).length > 0
+      ) {
+        for (const key of Object.keys(fieldForCheckExists)) {
+          const isIdKeyValid = key.match(/^[a-zA-Z0-9]+Id$/g);
+          const isString = typeof fieldForCheckExists[key] === 'string';
+          const isStringValid = fieldForCheckExists[key].match(/^\w+$/g);
+          const isNumber = typeof fieldForCheckExists[key] === 'number';
+          const isNumberValid = fieldForCheckExists[key].match(/^\d+$/g);
+          if (!(isIdKeyValid && isString && isStringValid))
+            throw new HttpResponse(
+              'It is not string invalid',
+              HttpStatus.BAD_REQUEST,
+            );
 
-        if (!(isIdKeyValid && isNumber && isNumberValid))
-          throw new HttpException(
-            'It is not number invalid',
-            HttpStatus.BAD_REQUEST,
-          );
+          if (!(isIdKeyValid && isNumber && isNumberValid))
+            throw new HttpResponse(
+              'It is not number invalid',
+              HttpStatus.BAD_REQUEST,
+            );
+        }
       }
-      const data = await this.repository.findOne({
-        where: { ...fieldForCheckExists },
-      });
-      if (data)
-        throw new HttpException(
+
+      const data = (await this.findAll(fieldForCheckExists)).data;
+      if (data && data.length > 0)
+        throw new HttpResponse(
           'Cannot create record when it exist',
           HttpStatus.CONFLICT,
         );
-    }
 
-    return new HttpResponse(
-      'Getting all record successfully',
-      HttpStatus.CREATED,
-      await this.repository.create(dto),
-    );
+      return new HttpResponse(
+        'Create record successfully',
+        HttpStatus.CREATED,
+        data,
+      );
+    } catch (error: any) {
+      return error;
+    }
   }
 
   /**
    * find all
    * @return
    */
-  async findAll() {
-    const response = await this.repository.findAll({
-      where: { deletedDate: { [Op.ne]: null } },
-    });
-
-    return new HttpResponse(
-      'Getting all record successfully',
-      HttpStatus.OK,
-      response,
-    );
+  async findAll(queries?: any) {
+    try {
+      let where: any = { deletedDate: { [Op.ne]: null } };
+      if (queries) {
+        where = { ...where, ...queries };
+      }
+      return new HttpResponse(
+        'Create record successfully',
+        HttpStatus.CREATED,
+        await this.repository.findAll({ where }),
+      );
+    } catch (error: any) {
+      return error;
+    }
   }
 
   /**
@@ -77,22 +84,29 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    * @return
    */
   async findOne(id: T) {
-    if (typeof id === 'string' && !id.match(/^[a-zA-Z0-9]{1,}$/g)) {
-      throw new HttpException('id is not valid string', HttpStatus.BAD_REQUEST);
-    }
+    try {
+      if (typeof id === 'string' && !id.match(/^[a-zA-Z0-9]{1,}$/g)) {
+        throw new HttpResponse(
+          'id is not valid string',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
 
-    if (typeof id === 'number' && !id.toString().match(/^\d+$/g)) {
-      throw new HttpException('id is not valid number', HttpStatus.BAD_REQUEST);
-    }
+      if (typeof id === 'number' && !id.toString().match(/^\d+$/g)) {
+        throw new HttpResponse(
+          'id is not valid number',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
 
-    const response = await this.repository.findOne({
-      where: { id },
-    });
+      const response = await this.repository.findOne({
+        where: { id },
+      });
 
-    if (!response) {
-      throw new HttpException('It is not exist', HttpStatus.BAD_REQUEST);
+      return new HttpResponse('Get user by id', HttpStatus.OK, response);
+    } catch (error: any) {
+      return error;
     }
-    return new HttpResponse('Get user by id', HttpStatus.OK, response);
   }
 
   /**
@@ -102,27 +116,39 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    * @return
    */
   async update(id: T, dto: UpdateDtoTemplate) {
-    if (typeof id === 'string' && !id.match(/^[a-zA-Z0-9]{1,}$/g)) {
-      throw new HttpException('id is not valid string', HttpStatus.BAD_REQUEST);
+    try {
+      if (typeof id === 'string' && !id.match(/^[a-zA-Z0-9]{1,}$/g)) {
+        throw new HttpResponse(
+          'id is not valid string',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      if (typeof id === 'number' && !id.toString().match(/^\d+$/g)) {
+        throw new HttpResponse(
+          'id is not valid number',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      const check = await this.repository.findOne({ where: { id } });
+
+      if (!check) {
+        throw new HttpResponse('user is not existed', HttpStatus.BAD_REQUEST);
+      }
+
+      const response = await this.repository.update(dto, {
+        where: { id },
+      });
+
+      return new HttpResponse(
+        'Update user by id successfully',
+        HttpStatus.OK,
+        response,
+      );
+    } catch (error: any) {
+      return error;
     }
-
-    if (typeof id === 'number' && !id.toString().match(/^\d+$/g)) {
-      throw new HttpException('id is not valid number', HttpStatus.BAD_REQUEST);
-    }
-
-    const check = await this.repository.findOne({
-      where: { id },
-    });
-
-    if (!check) {
-      throw new HttpException('user is not existed', HttpStatus.BAD_REQUEST);
-    }
-
-    const response = await this.repository.update(dto, {
-      where: { id },
-    });
-
-    return new HttpResponse('Get user by id', HttpStatus.OK, response);
   }
 
   /**
@@ -131,14 +157,17 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    * @return
    */
   async remove(id: T) {
-    const data = await this.repository.findOne({ where: { id } });
-    if (data == null || data == undefined)
-      throw new HttpException(
-        'Cannot remove record when it not exist',
-        HttpStatus.BAD_REQUEST,
-      );
-
-    await this.repository.destroy({ where: { id } });
-    return new HttpResponse('Delete successfully', HttpStatus.OK);
+    try {
+      const data = await this.repository.findOne({ where: { id } });
+      if (data == null || data == undefined)
+        throw new HttpResponse(
+          'Cannot remove record when it not exist',
+          HttpStatus.BAD_REQUEST,
+        );
+      await this.repository.destroy({ where: { id } });
+      return new HttpResponse('Delete successfully', HttpStatus.OK);
+    } catch (error: any) {
+      return error;
+    }
   }
 }
