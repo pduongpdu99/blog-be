@@ -14,6 +14,7 @@ import { PostTagsModule } from './apis/post-tags/post-tags.module';
 import { TagsModule } from './apis/tags/tags.module';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/module';
+import { AuthModule } from './apis/auths/auth.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { DatabaseModule } from './database/module';
     PostCategoriesModule,
     PostTagsModule,
     TagsModule,
+    AuthModule,
 
     ConfigModule.forRoot({
       envFilePath: '.development.env',
