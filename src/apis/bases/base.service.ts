@@ -64,9 +64,13 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    */
   async findAll(queries?: any) {
     try {
-      let where: any = { deletedDate: { [Op.ne]: null } };
+      let where: any = { deletedDate: { [Op.eq]: null } };
       if (queries) {
-        where = { ...where, ...queries };
+        const q: any = {};
+        Object.keys(queries).forEach((key) => {
+          q[key] = { [Op.eq]: queries[key] };
+        });
+        where = { ...where, ...q };
       }
       return new HttpResponse(
         'Create record successfully',
