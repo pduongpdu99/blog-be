@@ -38,7 +38,7 @@ export class UsersService extends BaseService<
 
       if (!dto.id) dto.id = uuidv4();
       dto.roleId = 0;
-      dto.expireIns = 24 * 3600;
+      dto.expireIns = new Date(new Date().getTime() + 24 * 3600).toISOString();
 
       return new HttpResponse(
         'Getting all record successfully',

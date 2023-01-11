@@ -82,7 +82,7 @@ export class AuthService {
 
     const needUpdate: UpdateUserDto = {
       refreshToken,
-      expireIns: 24 * 60 * 60,
+      expireIns: new Date(new Date().getTime() + 24 * 3600).toISOString(),
     };
 
     this.usersService.update(userCreated.id, needUpdate);
