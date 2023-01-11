@@ -1,11 +1,13 @@
-import { Controller, Post, Body, HttpStatus } from '@nestjs/common';
-import { HttpResponse } from '../bases/base.exception';
+import { Controller, Post, Body } from '@nestjs/common';
+import { BaseController } from '../bases/base.controller';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
-export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+export class UsersController extends BaseController {
+  constructor(private readonly usersService: UsersService) {
+    super(usersService);
+  }
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
