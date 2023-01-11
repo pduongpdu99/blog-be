@@ -1,11 +1,10 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { SignupDto } from '../users/dto/sign-up.dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UpdateUserDto } from '../users/dto/update-user.dto';
-import { HttpResponse } from '../bases/base.exception';
 
 @Injectable()
 export class AuthService {
@@ -21,15 +20,30 @@ export class AuthService {
    * @returns
    */
   async authentication(email: string, password: string): Promise<any> {
-    const user = await this.usersService.getUserByEmail(email);
+    const user = (await this.usersService.getUserByEmail(email)).dataValues;
     const check = bcrypt.compareSync(password, user.hash);
+
+    try {
+      const expireIns = user.expireIns;
+      if (!expireIns) {
+        throw new HttpException('Account expired', HttpStatus.BAD_REQUEST);
+      }
+
+      const expi = new Date(expireIns);
+      const curr = new Date();
+      if (curr.getTime() >= expi.getTime()) {
+        throw new HttpException('Account expired', HttpStatus.BAD_REQUEST);
+      }
+    } catch (err) {
+      return err;
+    }
 
     if (!user || !check) {
       return false;
     }
 
     delete user.hash;
-    return user;
+    return new HttpException('Authtication successfully', HttpStatus.OK, user);
   }
 
   /**
@@ -39,14 +53,19 @@ export class AuthService {
    */
   async login(user: { email: string; password: string }) {
     const result = await this.authentication(user.email, user.password);
-    if (result) {
-      const payload = { email: user.email, id: result.id };
-      const accessToken = this.jwtService.sign(payload, { expiresIn: '60s' });
-      return new HttpResponse('Login successfully', HttpStatus.OK, {
-        accessToken,
-      });
+    if (!(200 <= result.status && result.status < 300)) {
+      throw new HttpException(result.message, result.status);
     }
-    return new HttpResponse('Login failded', HttpStatus.BAD_REQUEST, result);
+
+    const data = result.data;
+    if (data.email && data.id) {
+      const payload = { email: user.email, id: data.id };
+      const accessToken = this.jwtService.sign(payload, {
+        expiresIn: process.env.ACCESS_EXPIRE_INS,
+      });
+      return { accessToken };
+    }
+    return data;
   }
 
   /**
@@ -57,7 +76,7 @@ export class AuthService {
     const { email, password } = dto;
     const resByEmail = await this.usersService.findAll({ email });
     if (resByEmail.data && resByEmail.data.length > 0) {
-      throw new HttpResponse(
+      throw new HttpException(
         'Cannot create this account cause email existed',
         HttpStatus.BAD_REQUEST,
       );
@@ -74,7 +93,7 @@ export class AuthService {
     const response = await this.usersService.create(params);
     const userCreated = response.data;
     if (!userCreated) {
-      throw new HttpResponse('Data cannot create', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Data cannot create', HttpStatus.BAD_REQUEST);
     }
 
     const payload = { email, id: userCreated.id };
@@ -86,9 +105,9 @@ export class AuthService {
     };
 
     this.usersService.update(userCreated.id, needUpdate);
-    return new HttpResponse('User created', HttpStatus.OK, {
+    return {
       ...params,
       refreshToken,
-    });
+    };
   }
 }
