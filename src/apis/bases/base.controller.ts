@@ -5,9 +5,7 @@ import {
   Patch,
   Param,
   Delete,
-  HttpStatus,
 } from '@nestjs/common';
-import { HttpResponse } from './base.exception';
 import { BaseService } from './base.service';
 
 export class BaseController {
