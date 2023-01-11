@@ -126,7 +126,12 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
    */
   async update(id: T, dto: UpdateDtoTemplate) {
     try {
-      if (typeof id === 'string' && !id.match(/^[a-zA-Z0-9]{1,}$/g)) {
+      if (
+        typeof id === 'string' &&
+        !id.match(
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/g,
+        )
+      ) {
         throw new HttpResponse(
           'id is not valid string',
           HttpStatus.BAD_REQUEST,
