@@ -25,10 +25,29 @@ export class UsersService extends BaseService<
    * @returns
    */
   async create(dto: CreateUserDto) {
-    if (!dto.id) dto.id = uuidv4();
-    dto.roleId = 0;
-    dto.expireIns = 24 * 3600;
-    return await this.userRepository.create<User>({ ...dto });
+    try {
+      const fieldForCheckExists = { email: dto.email };
+      const data = await this.userRepository.findAll({
+        where: { ...fieldForCheckExists },
+      });
+      if (data && data.length > 0)
+        throw new HttpResponse(
+          'Cannot create record when it exist',
+          HttpStatus.CONFLICT,
+        );
+
+      if (!dto.id) dto.id = uuidv4();
+      dto.roleId = 0;
+      dto.expireIns = 24 * 3600;
+
+      return new HttpResponse(
+        'Getting all record successfully',
+        HttpStatus.CREATED,
+        await this.userRepository.create<User>({ ...dto }),
+      );
+    } catch (error) {
+      return error;
+    }
   }
 
   /**
@@ -37,17 +56,21 @@ export class UsersService extends BaseService<
    * @returns
    */
   async getUserByEmail(email: string) {
-    const user = await this.userRepository.findOne<User>({
-      where: { email },
-    });
+    try {
+      const user = await this.userRepository.findOne<User>({
+        where: { email },
+      });
 
-    if (!user) {
-      throw new HttpException(
-        'User with email `' + email + '` is not exist',
-        HttpStatus.BAD_REQUEST,
-      );
+      if (!user) {
+        throw new HttpException(
+          'User with email `' + email + '` is not exist',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      return user;
+    } catch (error) {
+      return error;
     }
-
-    return user;
   }
 }
