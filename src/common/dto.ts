@@ -2,14 +2,6 @@ import { IsDateString, IsOptional } from '@nestjs/class-validator';
 export class BaseDto {
   @IsDateString()
   @IsOptional()
-  createdDate?: string;
-
-  @IsDateString()
-  @IsOptional()
-  updatedDate?: string;
-
-  @IsDateString()
-  @IsOptional()
   deletedDate?: string;
 
   @IsDateString()
