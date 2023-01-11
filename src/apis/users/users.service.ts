@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import PROVIDE_NAME from 'src/common/provide-name';
-import { HttpResponse } from '../bases/base.exception';
 import { BaseService } from '../bases/base.service';
 import { User } from '../entities.index';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -31,7 +30,7 @@ export class UsersService extends BaseService<
         where: { ...fieldForCheckExists },
       });
       if (data && data.length > 0)
-        throw new HttpResponse(
+        throw new HttpException(
           'Cannot create record when it exist',
           HttpStatus.CONFLICT,
         );
@@ -40,11 +39,7 @@ export class UsersService extends BaseService<
       dto.roleId = 0;
       dto.expireIns = new Date(new Date().getTime() + 24 * 3600).toISOString();
 
-      return new HttpResponse(
-        'Getting all record successfully',
-        HttpStatus.CREATED,
-        await this.userRepository.create<User>({ ...dto }),
-      );
+      return await this.userRepository.create<User>({ ...dto });
     } catch (error) {
       return error;
     }
