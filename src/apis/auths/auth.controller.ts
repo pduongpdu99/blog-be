@@ -1,29 +1,51 @@
 import {
   Controller,
-  Request,
   Post,
-  UseGuards,
   Body,
+  Get,
   HttpStatus,
+  Headers,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { HttpResponse } from '../bases/base.exception';
 import { SignupDto } from '../users/dto/sign-up.dto';
 import { AuthService } from './auth.service';
 
 @Controller()
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private jwtService: JwtService,
+  ) {}
 
   //   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
-  async login(@Request() req: any): Promise<{ access_token: string }> {
-    return this.authService.login(req.user);
+  async login(@Body() body: any) {
+    try {
+      return await this.authService.login(body);
+    } catch (err) {
+      return err;
+    }
   }
 
   @Post('auth/signup')
   async signup(@Body() params: SignupDto) {
-    const user = this.authService.signup(params);
+    try {
+      return await this.authService.signup(params);
+    } catch (err) {
+      return err;
+    }
+  }
 
-    return new HttpResponse('Sign up successfully', HttpStatus.OK, user);
+  @Get('test')
+  async test(@Headers() headers) {
+    try {
+      const accessToken = headers.access_token;
+      return await this.jwtService.verify(accessToken, {
+        publicKey: process.env.PUBLIC_KEY,
+      });
+    } catch (err) {
+      return new HttpResponse(err.message, HttpStatus.BAD_REQUEST);
+    }
   }
 }
