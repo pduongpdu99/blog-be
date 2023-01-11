@@ -33,7 +33,7 @@ export class CreateUserDto extends BaseDto {
   @IsString()
   bio?: string;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
-  expireIns?: number = 24 * 3600; // seconds
+  expireIns?: string; // seconds
 }
