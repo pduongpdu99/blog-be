@@ -37,6 +37,10 @@ export class User extends BaseEntity {
   @Column({ type: DataType.STRING(500), allowNull: true })
   bio?: string;
 
-  @Column({ type: DataType.BIGINT, defaultValue: 24 * 3600, allowNull: true })
-  expireIns?: number = 24 * 3600; // seconds
+  @Column({
+    type: DataType.STRING,
+    defaultValue: new Date(new Date().getTime() + 1 * 24 * 3600),
+    allowNull: true,
+  })
+  expireIns: string;
 }
