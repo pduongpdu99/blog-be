@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Op } from 'sequelize';
 import { HttpResponse } from './base.exception';
 
@@ -151,14 +151,12 @@ export class BaseService<CreateDtoTemplate, UpdateDtoTemplate, T> {
         throw new HttpResponse('user is not existed', HttpStatus.BAD_REQUEST);
       }
 
-      const response = await this.repository.update(dto, {
-        where: { id },
-      });
+      await this.repository.update(dto, { where: { id } });
 
       return new HttpResponse(
         'Update user by id successfully',
         HttpStatus.OK,
-        response,
+        (await this.findOne(id)).data,
       );
     } catch (error: any) {
       return error;
