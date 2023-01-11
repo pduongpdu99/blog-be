@@ -38,7 +38,7 @@ export class AuthController {
   }
 
   @Get('test')
-  async test(@Headers() headers) {
+  async test(@Headers() headers: any) {
     try {
       const accessToken = headers.access_token;
       return await this.jwtService.verify(accessToken, {
