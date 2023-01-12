@@ -43,7 +43,11 @@ export class AuthService {
     }
 
     delete user.hash;
-    return new HttpException('Authtication successfully', HttpStatus.OK, user);
+    return new HttpException(
+      'Authentication successfully',
+      HttpStatus.OK,
+      user,
+    );
   }
 
   /**
@@ -53,19 +57,20 @@ export class AuthService {
    */
   async login(user: { email: string; password: string }) {
     const result = await this.authentication(user.email, user.password);
+    const { email, id } = result.options;
     if (!(200 <= result.status && result.status < 300)) {
       throw new HttpException(result.message, result.status);
     }
 
-    const data = result.data;
-    if (data.email && data.id) {
-      const payload = { email: user.email, id: data.id };
+    if (email && id) {
+      const payload = { email, id };
       const accessToken = this.jwtService.sign(payload, {
         expiresIn: process.env.ACCESS_EXPIRE_INS,
+        secret: process.env.PRIVATE_KEY,
       });
       return { accessToken };
     }
-    return data;
+    return null;
   }
 
   /**
