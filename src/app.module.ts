@@ -15,6 +15,8 @@ import { TagsModule } from './apis/tags/tags.module';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/module';
 import { AuthModule } from './apis/auths/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -38,6 +40,6 @@ import { AuthModule } from './apis/auths/auth.module';
     DatabaseModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, { provide: APP_GUARD, useValue: AuthGuard }],
 })
 export class AppModule {}
