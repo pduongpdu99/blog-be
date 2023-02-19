@@ -7,9 +7,6 @@ export class AuthGuard implements CanActivate {
   canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
     const response = context.switchToHttp().getResponse();
-    if (!(200 <= response.code && response.code < 300)) {
-      return response.message;
-    }
 
     if (request.headers.authorization) {
       this.jwtService.verify(request.headers.authorization.split(' ')[1], {
@@ -18,6 +15,11 @@ export class AuthGuard implements CanActivate {
 
       return true;
     }
+
+    if (!(200 <= response.code && response.code < 300)) {
+      return response.message;
+    }
+
     return false;
   }
 }
