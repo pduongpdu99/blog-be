@@ -1,34 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { PostTagsService } from './post-tags.service';
-import { CreatePostTagDto } from './dto/create-post-tag.dto';
-import { UpdatePostTagDto } from './dto/update-post-tag.dto';
+import { BaseController } from '../bases/base.controller';
 
 @Controller('post-tags')
-export class PostTagsController {
-  constructor(private readonly postTagsService: PostTagsService) {}
-
-  @Post()
-  create(@Body() createPostTagDto: CreatePostTagDto) {
-    return this.postTagsService.create(createPostTagDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.postTagsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.postTagsService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: number, @Body() updatePostTagDto: UpdatePostTagDto) {
-    return this.postTagsService.update(id, updatePostTagDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.postTagsService.remove(id);
+export class PostTagsController extends BaseController {
+  constructor(private readonly postTagsService: PostTagsService) {
+    super(postTagsService);
   }
 }
